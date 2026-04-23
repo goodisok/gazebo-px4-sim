@@ -4,3 +4,4 @@ __pycache__/
 *.ulg
 .timestamp_marker
 node_modules/
+*.ulg
