@@ -4,7 +4,10 @@
     Interceptor drone model for Sim-to-Real dynamics validation.
     Self-contained SDF derived from x500_base with parameter modifications.
     
-    Round 1 parameter errors (vs x500 truth):
+    This file stores the Round 1 (initial guess) parameters.
+    Use update_interceptor_params.py to modify for each experiment round.
+    
+    Parameter deviations vs x500 truth:
       mass:            2.0 → 2.3  (+15%)
       Ixx/Iyy:        0.02167 → 0.0249  (+15%)
       motorConstant:   8.54858e-06 → 7.01e-06  (-18%)
@@ -17,12 +20,12 @@
 
     <link name="base_link">
       <inertial>
-        <mass>2.0</mass>
+        <mass>2.3</mass>
         <inertia>
-          <ixx>0.02166666666666667</ixx>
+          <ixx>0.0249</ixx>
           <ixy>0</ixy>
           <ixz>0</ixz>
-          <iyy>0.02166666666666667</iyy>
+          <iyy>0.0249</iyy>
           <iyz>0</iyz>
           <izz>0.04000000000000001</izz>
         </inertia>
@@ -225,10 +228,10 @@
       <jointName>rotor_0_joint</jointName>
       <linkName>rotor_0</linkName>
       <turningDirection>ccw</turningDirection>
-      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantUp>0.020</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+      <motorConstant>7.01e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>0</motorNumber>
@@ -242,10 +245,10 @@
       <jointName>rotor_1_joint</jointName>
       <linkName>rotor_1</linkName>
       <turningDirection>ccw</turningDirection>
-      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantUp>0.020</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+      <motorConstant>7.01e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>1</motorNumber>
@@ -259,10 +262,10 @@
       <jointName>rotor_2_joint</jointName>
       <linkName>rotor_2</linkName>
       <turningDirection>cw</turningDirection>
-      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantUp>0.020</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+      <motorConstant>7.01e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>2</motorNumber>
@@ -276,10 +279,10 @@
       <jointName>rotor_3_joint</jointName>
       <linkName>rotor_3</linkName>
       <turningDirection>cw</turningDirection>
-      <timeConstantUp>0.0125</timeConstantUp>
+      <timeConstantUp>0.020</timeConstantUp>
       <timeConstantDown>0.025</timeConstantDown>
       <maxRotVelocity>1000.0</maxRotVelocity>
-      <motorConstant>8.54858e-06</motorConstant>
+      <motorConstant>7.01e-06</motorConstant>
       <momentConstant>0.016</momentConstant>
       <commandSubTopic>command/motor_speed</commandSubTopic>
       <motorNumber>3</motorNumber>
