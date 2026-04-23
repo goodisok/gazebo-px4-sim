@@ -27,9 +27,10 @@ python3 compare.py data/x500_csv data/interceptor_csv --output-dir results/
 
 ```
 gazebo-px4-sim/
-├── PX4-Autopilot/              # PX4 v1.16.1 (git submodule)
-│   └── Tools/simulation/gz/models/
-│       └── interceptor/        # 自定义 interceptor 模型
+├── px4_custom/                 # PX4 中新增/修改的文件（见 px4_custom/README.md）
+│   ├── models/interceptor/     # interceptor SDF 模型（基于 x500 修改）
+│   └── airframes/              # PX4 airframe 配置 (4050_gz_interceptor)
+├── PX4-Autopilot/              # PX4 v1.16.1 源码（.gitignore，需自行克隆）
 ├── scripts/
 │   ├── fly_mission.py          # 自动化标准机动飞行
 │   ├── extract_ulg.py          # ULG 日志解析 → CSV
