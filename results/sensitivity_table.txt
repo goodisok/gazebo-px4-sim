@@ -1,0 +1,24 @@
+Parameter Sensitivity Analysis
+(sorted by RMSE delta, negative = improvement)
+
+==========================================================================================
+Round  Param Changed           Channel         Before     After     Delta   %Change  Label
+==========================================================================================
+    2  mass                    Yaw            64.1453   54.9105   -9.2348    -14.4%  Fix mass → 2.0
+    4  timeConstantUp, Ixx, Iyy  Roll            4.8679    3.4360   -1.4319    -29.4%  Fix Ixx/Iyy + timeConstantUp
+    2  mass                    Roll            4.5851    3.6622   -0.9229    -20.1%  Fix mass → 2.0
+    2  mass                    Position Z      0.7058    0.1709   -0.5349    -75.8%  Fix mass → 2.0
+    2  mass                    Pitch           2.4893    2.0006   -0.4887    -19.6%  Fix mass → 2.0
+    4  timeConstantUp, Ixx, Iyy  Pitch           2.7146    2.2470   -0.4676    -17.2%  Fix Ixx/Iyy + timeConstantUp
+    4  timeConstantUp, Ixx, Iyy  Position Z      0.2877    0.1471   -0.1406    -48.9%  Fix Ixx/Iyy + timeConstantUp
+    3  motorConstant           Position Z      0.1709    0.2877   +0.1168    +68.3%  Fix motorConstant → 8.549e-6
+    3  motorConstant           Pitch           2.0006    2.7146   +0.7140    +35.7%  Fix motorConstant → 8.549e-6
+    3  motorConstant           Roll            3.6622    4.8679   +1.2057    +32.9%  Fix motorConstant → 8.549e-6
+    3  motorConstant           Yaw            54.9105   59.0647   +4.1542     +7.6%  Fix motorConstant → 8.549e-6
+    4  timeConstantUp, Ixx, Iyy  Yaw            59.0647   63.3583   +4.2936     +7.3%  Fix Ixx/Iyy + timeConstantUp
+==========================================================================================
+
+Summary (most impactful parameter fixes):
+--------------------------------------------------
+  1. Round 2: fix mass               → Yaw RMSE -9.2348 (-14.4%)
+  2. Round 4: fix timeConstantUp, Ixx, Iyy → Roll RMSE -1.4319 (-29.4%)

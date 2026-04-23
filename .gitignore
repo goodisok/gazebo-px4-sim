@@ -1,0 +1,6 @@
+PX4-Autopilot/
+__pycache__/
+*.pyc
+*.ulg
+.timestamp_marker
+node_modules/

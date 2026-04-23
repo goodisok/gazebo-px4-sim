@@ -1,0 +1,26 @@
+[
+  {
+    "round": 1,
+    "label": "Initial guess (+15% mass, -18% thrust, +60% tau, +15% Ixx/Iyy)",
+    "params": {"mass": 2.3, "Ixx": 0.0249, "Iyy": 0.0249, "Izz": 0.04, "motorConstant": 7.01e-06, "timeConstantUp": 0.020},
+    "metrics_file": "round1/metrics.json"
+  },
+  {
+    "round": 2,
+    "label": "Fix mass → 2.0",
+    "params": {"mass": 2.0, "Ixx": 0.0249, "Iyy": 0.0249, "Izz": 0.04, "motorConstant": 7.01e-06, "timeConstantUp": 0.020},
+    "metrics_file": "round2_fix_mass/metrics.json"
+  },
+  {
+    "round": 3,
+    "label": "Fix motorConstant → 8.549e-6",
+    "params": {"mass": 2.0, "Ixx": 0.0249, "Iyy": 0.0249, "Izz": 0.04, "motorConstant": 8.54858e-06, "timeConstantUp": 0.020},
+    "metrics_file": "round3_fix_motor/metrics.json"
+  },
+  {
+    "round": 4,
+    "label": "Fix Ixx/Iyy + timeConstantUp",
+    "params": {"mass": 2.0, "Ixx": 0.02167, "Iyy": 0.02167, "Izz": 0.04, "motorConstant": 8.54858e-06, "timeConstantUp": 0.0125},
+    "metrics_file": "round4_fix_inertia/metrics.json"
+  }
+]
