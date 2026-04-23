@@ -4,21 +4,22 @@ Parameter Sensitivity Analysis
 ==========================================================================================
 Round  Param Changed           Channel         Before     After     Delta   %Change  Label
 ==========================================================================================
-    2  mass                    Yaw            64.1453   54.9105   -9.2348    -14.4%  Fix mass → 2.0
-    4  timeConstantUp, Ixx, Iyy  Roll            4.8679    3.4360   -1.4319    -29.4%  Fix Ixx/Iyy + timeConstantUp
-    2  mass                    Roll            4.5851    3.6622   -0.9229    -20.1%  Fix mass → 2.0
-    2  mass                    Position Z      0.7058    0.1709   -0.5349    -75.8%  Fix mass → 2.0
-    2  mass                    Pitch           2.4893    2.0006   -0.4887    -19.6%  Fix mass → 2.0
-    4  timeConstantUp, Ixx, Iyy  Pitch           2.7146    2.2470   -0.4676    -17.2%  Fix Ixx/Iyy + timeConstantUp
-    4  timeConstantUp, Ixx, Iyy  Position Z      0.2877    0.1471   -0.1406    -48.9%  Fix Ixx/Iyy + timeConstantUp
-    3  motorConstant           Position Z      0.1709    0.2877   +0.1168    +68.3%  Fix motorConstant → 8.549e-6
-    3  motorConstant           Pitch           2.0006    2.7146   +0.7140    +35.7%  Fix motorConstant → 8.549e-6
-    3  motorConstant           Roll            3.6622    4.8679   +1.2057    +32.9%  Fix motorConstant → 8.549e-6
-    3  motorConstant           Yaw            54.9105   59.0647   +4.1542     +7.6%  Fix motorConstant → 8.549e-6
-    4  timeConstantUp, Ixx, Iyy  Yaw            59.0647   63.3583   +4.2936     +7.3%  Fix Ixx/Iyy + timeConstantUp
+    3  motorConstant           Yaw            66.0465   46.2735  -19.7730    -29.9%  Fix motorConstant → 8.549e-6
+    3  motorConstant           Pitch           3.7936    2.3324   -1.4612    -38.5%  Fix motorConstant → 8.549e-6
+    3  motorConstant           Roll            5.1268    4.2208   -0.9060    -17.7%  Fix motorConstant → 8.549e-6
+    2  mass                    Position Z      3.2428    2.6294   -0.6134    -18.9%  Fix mass → 2.0
+    2  mass                    Pitch           4.2707    3.7936   -0.4771    -11.2%  Fix mass → 2.0
+    4  Ixx, Iyy, timeConstantUp  Pitch           2.3324    2.3310   -0.0014     -0.1%  Fix Ixx/Iyy + timeConstantUp
+    4  Ixx, Iyy, timeConstantUp  Roll            4.2208    4.2207   -0.0001     -0.0%  Fix Ixx/Iyy + timeConstantUp
+    4  Ixx, Iyy, timeConstantUp  Position Z      4.8100    4.8233   +0.0133     +0.3%  Fix Ixx/Iyy + timeConstantUp
+    2  mass                    Roll            5.1020    5.1268   +0.0248     +0.5%  Fix mass → 2.0
+    4  Ixx, Iyy, timeConstantUp  Yaw            46.2735   46.8111   +0.5376     +1.2%  Fix Ixx/Iyy + timeConstantUp
+    3  motorConstant           Position Z      2.6294    4.8100   +2.1806    +82.9%  Fix motorConstant → 8.549e-6
+    2  mass                    Yaw            54.2993   66.0465  +11.7472    +21.6%  Fix mass → 2.0
 ==========================================================================================
 
 Summary (most impactful parameter fixes):
 --------------------------------------------------
-  1. Round 2: fix mass               → Yaw RMSE -9.2348 (-14.4%)
-  2. Round 4: fix timeConstantUp, Ixx, Iyy → Roll RMSE -1.4319 (-29.4%)
+  1. Round 3: fix motorConstant      → Yaw RMSE -19.7730 (-29.9%)
+  2. Round 2: fix mass               → Position Z RMSE -0.6134 (-18.9%)
+  3. Round 4: fix Ixx, Iyy, timeConstantUp → Pitch RMSE -0.0014 (-0.1%)
