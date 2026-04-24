@@ -44,6 +44,10 @@ gazebo-px4-sim/
 │   ├── models/interceptor/             # interceptor SDF 模型（基于 x500 修改）
 │   └── airframes/4050_gz_interceptor
 ├── PX4-Autopilot/                      # PX4 v1.16.1 源码（.gitignore，需自行克隆）
+├── plugins/quadratic_drag/             # ★ v² 阻力自定义 Gazebo 插件
+│   ├── QuadraticDrag.cc               #   C++ 源码（~100 行）
+│   ├── CMakeLists.txt                 #   构建配置（依赖 gz-sim8）
+│   └── README.md                      #   使用说明
 ├── scripts/
 │   ├── fly_mission.py                  # x500 真值数据采集（标准机动序列）
 │   ├── setpoint_replay.py             # ★ 设定点回放（核心实验脚本）
@@ -55,10 +59,13 @@ gazebo-px4-sim/
 │   ├── run_setpoint_replay_all_rounds.sh  # 4 轮自动化脚本
 │   ├── openloop_replay.py            # 开环执行器回放（实验证伪用）
 │   ├── create_hp_model.py            # 创建高性能 x500_hp 模型
-│   ├── create_gobi_model.py          # ★ 创建 Gobi 截击机模型（T/W≈10, 97 m/s）
+│   ├── create_gobi_model.py          # 创建 Gobi v1 模型（线性阻力）
+│   ├── create_gobi_v2_model.py       # ★ 创建 Gobi v2 模型（QuadraticDrag）
 │   ├── fly_multispeed.py             # 多速度段飞行测试（0-50 m/s）
-│   ├── fly_gobi_multispeed.py        # ★ Gobi 多速度段飞行（0-97 m/s）
-│   ├── gobi_analysis.py              # ★ Gobi 高速分析（k_f + 阻力辨识）
+│   ├── fly_gobi_multispeed.py        # Gobi 多速度段飞行（0-97 m/s）
+│   ├── gobi_analysis.py              # Gobi 高速分析（k_f + 阻力辨识）
+│   ├── compare_gobi_v1_v2.py         # ★ v1 vs v2 阻力模型对比
+│   ├── run_gobi_v2_sitl.sh           # ★ 一键启动 gobi_v2 SITL
 │   ├── fly_sysid_maneuver.py         # 系统辨识激励机动
 │   ├── imu_sysid.py                  # IMU-based k_f 辨识
 │   ├── analyze_sysid_results.py      # 高速飞行分析
@@ -78,7 +85,7 @@ gazebo-px4-sim/
 │   │   ├── comprehensive/            #   全速域综合分析
 │   │   ├── replay_aligned/           #   对齐后 replay 对比
 │   │   └── setpoint_replay_*/        #   高速 replay 结果
-│   ├── gobi/                          # ★ Gobi 截击机实验结果（0-97 m/s）
+│   ├── gobi/                          # ★ Gobi 截击机实验结果（v1+v2, 0-97 m/s）
 │   ├── sysid_analysis/               # 系统辨识结果
 │   ├── sp_experiments.json
 │   └── x500_truth_csv/
@@ -120,7 +127,19 @@ gazebo-px4-sim/
 | 50 m/s | 15.0 N | 30.6 N | **2.0×** |
 | 97 m/s | 29.1 N | 115.3 N | **4.0×** |
 
-**关键发现**：Gazebo 的 velocity_decay（线性阻力）在 50 m/s 以上完全不可靠，97 m/s 时阻力模型偏差达 4 倍。50+ m/s 截击机仿真必须使用 LiftDrag 插件或自定义 v² 阻力模型。
+**关键发现**：Gazebo 的 velocity_decay（线性阻力）在 50 m/s 以上完全不可靠，97 m/s 时阻力模型偏差达 4 倍。
+
+### Gobi v2（QuadraticDrag 插件修复后）
+
+使用本项目的 `QuadraticDrag` 自定义插件（CdA=0.020）替换 velocity_decay 后：
+
+| 指标 | Gobi v1 (线性) | Gobi v2 (v²) | 差异 |
+|------|---------------|--------------|------|
+| 最高水平速度 | 90.6 m/s | 76.4 m/s | **−14.2 m/s (−15.7%)** |
+| 97 m/s 理论阻力 | 29.1 N | 115.3 N | **4.0×** |
+| 物理合理性 | ❌ 阻力远低于真实 | ✅ 推力-阻力平衡合理 | — |
+
+v2 的最高速度 76.4 m/s 处于推力-阻力平衡点，物理上合理。
 
 ## 环境要求
 

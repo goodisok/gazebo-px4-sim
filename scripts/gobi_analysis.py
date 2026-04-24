@@ -9,6 +9,7 @@ Gobi interceptor multi-speed analysis:
 
 import os
 import sys
+import argparse
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -196,7 +197,7 @@ def estimate_drag(data, segments):
     return pd.DataFrame(results)
 
 
-def plot_speed_profile(data, out_dir):
+def plot_speed_profile(data, out_dir, prefix="gobi"):
     """Plot full speed profile over time."""
     fig, axes = plt.subplots(3, 1, figsize=(14, 10), sharex=True)
 
@@ -223,13 +224,13 @@ def plot_speed_profile(data, out_dir):
     axes[2].grid(True, alpha=0.3)
 
     plt.tight_layout()
-    path = os.path.join(out_dir, 'gobi_speed_profile.png')
+    path = os.path.join(out_dir, f'{prefix}_speed_profile.png')
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"Saved: {path}")
 
 
-def plot_kf_vs_speed(kf_df, out_dir):
+def plot_kf_vs_speed(kf_df, out_dir, prefix="gobi"):
     """Plot k_f estimation vs speed."""
     if kf_df.empty:
         print("No k_f data to plot")
@@ -251,13 +252,13 @@ def plot_kf_vs_speed(kf_df, out_dir):
                         ha='center', fontsize=8)
 
     plt.tight_layout()
-    path = os.path.join(out_dir, 'gobi_kf_vs_speed.png')
+    path = os.path.join(out_dir, f'{prefix}_kf_vs_speed.png')
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"Saved: {path}")
 
 
-def plot_drag_analysis(drag_df, out_dir):
+def plot_drag_analysis(drag_df, out_dir, prefix="gobi"):
     """Plot drag force: measured vs linear model vs quadratic model."""
     if drag_df.empty:
         print("No drag data to plot")
@@ -304,13 +305,13 @@ def plot_drag_analysis(drag_df, out_dir):
                          xytext=(10, 5), fontsize=9)
 
     plt.tight_layout()
-    path = os.path.join(out_dir, 'gobi_drag_analysis.png')
+    path = os.path.join(out_dir, f'{prefix}_drag_analysis.png')
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"Saved: {path}")
 
 
-def plot_cda_vs_speed(drag_df, out_dir):
+def plot_cda_vs_speed(drag_df, out_dir, prefix="gobi"):
     """Plot estimated CdA vs speed showing linear model breakdown."""
     if drag_df.empty or 'cda_est' not in drag_df.columns:
         return
@@ -329,17 +330,24 @@ def plot_cda_vs_speed(drag_df, out_dir):
     ax.grid(True, alpha=0.3)
 
     plt.tight_layout()
-    path = os.path.join(out_dir, 'gobi_cda_vs_speed.png')
+    path = os.path.join(out_dir, f'{prefix}_cda_vs_speed.png')
     plt.savefig(path, dpi=150)
     plt.close()
     print(f"Saved: {path}")
 
 
 def main():
-    os.makedirs(RESULT_DIR, exist_ok=True)
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--ulg", default=ULG_PATH, help="ULG file path")
+    ap.add_argument("--out-dir", default=RESULT_DIR, help="Output directory for plots/csv")
+    ap.add_argument("--prefix", default="gobi", help="Output filename prefix")
+    args = ap.parse_args()
+    out_dir = args.out_dir
+    os.makedirs(out_dir, exist_ok=True)
+    prefix = args.prefix
 
-    print(f"Loading ULG: {ULG_PATH}")
-    datasets = load_ulg(ULG_PATH)
+    print(f"Loading ULG: {args.ulg}")
+    datasets = load_ulg(args.ulg)
     print(f"Available datasets: {list(datasets.keys())[:10]}")
 
     data = extract_data(datasets)
@@ -363,12 +371,12 @@ def main():
         print("\nDrag estimation results:")
         print(drag_df.to_string(index=False))
 
-    plot_speed_profile(data, RESULT_DIR)
-    plot_kf_vs_speed(kf_df, RESULT_DIR)
-    plot_drag_analysis(drag_df, RESULT_DIR)
-    plot_cda_vs_speed(drag_df, RESULT_DIR)
+    plot_speed_profile(data, out_dir, prefix=prefix)
+    plot_kf_vs_speed(kf_df, out_dir, prefix=prefix)
+    plot_drag_analysis(drag_df, out_dir, prefix=prefix)
+    plot_cda_vs_speed(drag_df, out_dir, prefix=prefix)
 
-    summary_path = os.path.join(RESULT_DIR, 'gobi_summary.csv')
+    summary_path = os.path.join(out_dir, f'{prefix}_summary.csv')
     if not kf_df.empty:
         kf_df.to_csv(summary_path, index=False)
         print(f"\nSummary saved: {summary_path}")
