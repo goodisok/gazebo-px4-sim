@@ -1,3 +1,0 @@
-/home/hw/github_code/gazebo-px4-sim/plugins/quadratic_drag/build/CMakeFiles/QuadraticDrag.dir
-/home/hw/github_code/gazebo-px4-sim/plugins/quadratic_drag/build/CMakeFiles/edit_cache.dir
-/home/hw/github_code/gazebo-px4-sim/plugins/quadratic_drag/build/CMakeFiles/rebuild_cache.dir

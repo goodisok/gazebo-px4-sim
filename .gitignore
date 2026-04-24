@@ -5,3 +5,4 @@ __pycache__/
 .timestamp_marker
 node_modules/
 data/flight_logs/
+**/build/
