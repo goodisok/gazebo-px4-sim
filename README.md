@@ -47,25 +47,37 @@ gazebo-px4-sim/
 ├── scripts/
 │   ├── fly_mission.py                  # x500 真值数据采集（标准机动序列）
 │   ├── setpoint_replay.py             # ★ 设定点回放（核心实验脚本）
-│   ├── extract_ulg.py                 # ULG → CSV（位置/速度/姿态/角速度/电机）
+│   ├── extract_ulg.py                 # ULG → CSV
 │   ├── compare.py                     # 时间对齐 + RMSE/R² + 对比图
 │   ├── sensitivity.py                 # 多轮收敛分析 + 灵敏度排序
 │   ├── sp_convergence_analysis.py     # 4 维收敛图生成
 │   ├── update_interceptor_params.py   # 命令行修改 SDF 参数
 │   ├── run_setpoint_replay_all_rounds.sh  # 4 轮自动化脚本
-│   └── openloop_replay.py            # 开环执行器回放（实验证伪用）
+│   ├── openloop_replay.py            # 开环执行器回放（实验证伪用）
+│   ├── create_hp_model.py            # 创建高性能 x500_hp 模型
+│   ├── fly_multispeed.py             # 多速度段飞行测试（0-50 m/s）
+│   ├── fly_sysid_maneuver.py         # 系统辨识激励机动
+│   ├── imu_sysid.py                  # IMU-based k_f 辨识
+│   ├── analyze_sysid_results.py      # 高速飞行分析
+│   ├── comprehensive_analysis.py     # 全速域综合分析
+│   ├── compare_ulg.py               # ULG 直接对比
+│   ├── compare_replay_aligned.py     # 对齐后 replay 对比
+│   ├── run_full_experiment.py        # 高速实验自动化（Python）
+│   └── run_highspeed_experiment.sh   # 高速实验自动化（Shell）
 ├── worlds/
-│   └── openloop.sdf                   # 独立 Gazebo world（无 PX4，开环实验用）
+│   └── openloop.sdf                   # 独立 Gazebo world（开环实验用）
 ├── data/flight_logs/                   # ULG 日志文件（.gitignore）
 ├── results/
-│   ├── sp_round1/ ~ sp_round4/        # ★ 4 轮设定点回放结果（CSV + 对比图 + metrics）
-│   ├── sp_experiments.json            # 设定点回放实验配置
-│   ├── sp_convergence_full.png        # 4 维收敛图
-│   ├── x500_truth_csv/               # 真值数据 CSV
-│   ├── round1/ ~ round4_fix_inertia/  # 旧版同脚本实验结果（留作参考）
-│   ├── openloop_round4/              # 开环回放结果（证伪实验）
-│   ├── convergence.png
-│   └── sensitivity_table.txt
+│   ├── sp_round1/ ~ sp_round4/        # ★ 4 轮设定点回放结果
+│   ├── highspeed/                     # ★ 高速实验结果（0-50 m/s）
+│   │   ├── analysis_x500/            #   x500 基准分析
+│   │   ├── analysis_hp_*/            #   HP 模型各速度段分析
+│   │   ├── comprehensive/            #   全速域综合分析
+│   │   ├── replay_aligned/           #   对齐后 replay 对比
+│   │   └── setpoint_replay_*/        #   高速 replay 结果
+│   ├── sysid_analysis/               # 系统辨识结果
+│   ├── sp_experiments.json
+│   └── x500_truth_csv/
 └── README.md
 ```
 
@@ -85,6 +97,20 @@ gazebo-px4-sim/
 - **惯性矩和电机时间常数在设定点回放层面不可观测**——被 PX4 控制器的鲁棒性遮蔽
 - **位置 RMSE 因累积漂移不适合作为评价指标**，速度和姿态才是动力学匹配度的真实反映
 - **开环执行器回放在四旋翼上不可行**——本征不稳定系统脱离控制器后立即坠毁
+
+## 高速实验结果（0-50 m/s）
+
+使用 x500_hp 模型（T/W≈8）验证方法在高速域的适用性：
+
+| 速度段 | k_f 辨识误差 | 诊断含义 |
+|--------|------------|---------|
+| 10-25 m/s | **3-4%** | 模型结构充分准确，最佳辨识区间 |
+| 0-5 m/s | 15-21% | 低信噪比 + 低速阻力扰动 |
+| 40-50 m/s | 9-15% | 模型结构开始不足（非线性阻力未建模） |
+
+- 气动阻力辨识误差 < 1%
+- Setpoint replay 位置 R² > 0.9（全速域）
+- k_f 随速度漂移揭示了模型结构缺陷——方法论的诊断价值
 
 ## 环境要求
 
