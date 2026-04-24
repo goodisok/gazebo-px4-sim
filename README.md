@@ -55,7 +55,10 @@ gazebo-px4-sim/
 │   ├── run_setpoint_replay_all_rounds.sh  # 4 轮自动化脚本
 │   ├── openloop_replay.py            # 开环执行器回放（实验证伪用）
 │   ├── create_hp_model.py            # 创建高性能 x500_hp 模型
+│   ├── create_gobi_model.py          # ★ 创建 Gobi 截击机模型（T/W≈10, 97 m/s）
 │   ├── fly_multispeed.py             # 多速度段飞行测试（0-50 m/s）
+│   ├── fly_gobi_multispeed.py        # ★ Gobi 多速度段飞行（0-97 m/s）
+│   ├── gobi_analysis.py              # ★ Gobi 高速分析（k_f + 阻力辨识）
 │   ├── fly_sysid_maneuver.py         # 系统辨识激励机动
 │   ├── imu_sysid.py                  # IMU-based k_f 辨识
 │   ├── analyze_sysid_results.py      # 高速飞行分析
@@ -75,6 +78,7 @@ gazebo-px4-sim/
 │   │   ├── comprehensive/            #   全速域综合分析
 │   │   ├── replay_aligned/           #   对齐后 replay 对比
 │   │   └── setpoint_replay_*/        #   高速 replay 结果
+│   ├── gobi/                          # ★ Gobi 截击机实验结果（0-97 m/s）
 │   ├── sysid_analysis/               # 系统辨识结果
 │   ├── sp_experiments.json
 │   └── x500_truth_csv/
@@ -98,9 +102,9 @@ gazebo-px4-sim/
 - **位置 RMSE 因累积漂移不适合作为评价指标**，速度和姿态才是动力学匹配度的真实反映
 - **开环执行器回放在四旋翼上不可行**——本征不稳定系统脱离控制器后立即坠毁
 
-## 高速实验结果（0-50 m/s）
+## 高速实验结果
 
-使用 x500_hp 模型（T/W≈8）验证方法在高速域的适用性：
+### x500_hp（0-50 m/s，T/W≈8）
 
 | 速度段 | k_f 辨识误差 | 诊断含义 |
 |--------|------------|---------|
@@ -108,9 +112,15 @@ gazebo-px4-sim/
 | 0-5 m/s | 15-21% | 低信噪比 + 低速阻力扰动 |
 | 40-50 m/s | 9-15% | 模型结构开始不足（非线性阻力未建模） |
 
-- 气动阻力辨识误差 < 1%
-- Setpoint replay 位置 R² > 0.9（全速域）
-- k_f 随速度漂移揭示了模型结构缺陷——方法论的诊断价值
+### Gobi 截击机（0-97 m/s，T/W≈10）
+
+| 速度 | Gazebo 线性阻力 | 真实 v² 阻力 | 倍率 |
+|------|---------------|-------------|------|
+| 25 m/s | 7.5 N | 7.7 N | 1.0× |
+| 50 m/s | 15.0 N | 30.6 N | **2.0×** |
+| 97 m/s | 29.1 N | 115.3 N | **4.0×** |
+
+**关键发现**：Gazebo 的 velocity_decay（线性阻力）在 50 m/s 以上完全不可靠，97 m/s 时阻力模型偏差达 4 倍。50+ m/s 截击机仿真必须使用 LiftDrag 插件或自定义 v² 阻力模型。
 
 ## 环境要求
 
